@@ -32,6 +32,11 @@ jobs:
       - uses: open-turo/actions-gha/test@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          # Have to set IGNORE_INSTALLED to true here since the kotlin install attempt
+          # will otherwise find the kotlin version that comes standard with ubuntu,
+          # rather than the version installed via sdkman.
+          IGNORE_INSTALLED: "true"
 
   # Build and run the action from this repo to test full functionality
   action:
