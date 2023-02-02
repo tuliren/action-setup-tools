@@ -105,6 +105,7 @@ jobs:
         run: |
           # Installing pyenv
           curl https://pyenv.run | bash
+          PATH="$HOME/.pyenv/bin:$PATH" eval "$(pyenv init -)"
           # Install a Python version so we have shims, this is slow but necessary
           PATH="$HOME/.pyenv/bin:$PATH" pyenv install 3.10.4
           # Generate shims
