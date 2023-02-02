@@ -105,11 +105,11 @@ jobs:
         run: |
           # Installing pyenv
           curl https://pyenv.run | bash
-          PATH="$HOME/.pyenv/bin:$PATH" eval "$(pyenv init -)"
+          PYENV_ROOT="$HOME/.pyenv" PATH="$HOME/.pyenv/bin:$PATH" eval "$(pyenv init -)"
           # Install a Python version so we have shims, this is slow but necessary
-          PATH="$HOME/.pyenv/bin:$PATH" pyenv install 3.10.4
+          PYENV_ROOT="$HOME/.pyenv" PATH="$HOME/.pyenv/bin:$PATH" pyenv install 3.10.4
           # Generate shims
-          PATH="$HOME/.pyenv/bin:$PATH" pyenv rehash
+          PYENV_ROOT="$HOME/.pyenv" PATH="$HOME/.pyenv/bin:$PATH" pyenv rehash
       - name: Create version files
         run: echo "${PYTHON_VERSION}" > .python-version
       - name: Setup python
@@ -131,7 +131,7 @@ jobs:
           echo "::debug::python --version: $output"
           echo "::debug::python3 --version: $(python3 --version 2>&1 || true)"
           echo "::debug::pyenv versions: $(pyenv versions 2>&1 || true)"
-          echo "::debug::./pyenv/shims: $(ls -1 "$(pyenv root)/shims" 2>&1 || true)"
+          echo "::debug::.pyenv/shims: $(ls -1 "$HOME/.pyenv/shims" 2>&1 || true)"
           echo -e "::debug::PATH:\n$(echo "$PATH" | tr ":" "\n")"
           echo "$output" | grep -i "pyenv: version .* not installed" && \
             {
