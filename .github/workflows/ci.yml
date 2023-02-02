@@ -113,7 +113,14 @@ jobs:
         run: echo "${PYTHON_VERSION}" > .python-version
       - name: Setup python
         uses: actions/setup-python@v4
-      - name: Run action using version files
+      - name: Debug environment
+        run: |
+          echo "::debug::python --version: $(python --version 2>&1 || true)"
+          echo "::debug::python3 --version: $(python3 --version 2>&1 || true)"
+          echo "::debug::pyenv versions: $(pyenv versions 2>&1 || true)"
+          echo "::debug::./pyenv/shims: $(ls -1 "$(pyenv root)/shims" 2>&1 || true)"
+          echo -e "::debug::PATH:\n$(echo "$PATH" | tr ":" "\n")"
+      - name: Run action-setup-tools
         uses: ./
       - name: Pyenv should not preempt actions/setup-python versions
         shell: bash
@@ -121,17 +128,15 @@ jobs:
           # Check versions
           output="$(python --version 2>&1 || true)"
           echo "::debug::python --version: $output"
-          # This is overly noisy, uncomment for debugging
-          # output3="$(python3 --version 2>&1 || true)"
-          # echo "::debug::python3 --version: $output3"
-          # echo "::debug::pyenv versions: $(pyenv versions 2>&1 || true)"
-          # echo "::debug::./pyenv/shims: $(ls -1 "$(pyenv root)/shims" 2>&1 || true)"
+          echo "::debug::python3 --version: $(python3 --version 2>&1 || true)"
+          echo "::debug::pyenv versions: $(pyenv versions 2>&1 || true)"
+          echo "::debug::./pyenv/shims: $(ls -1 "$(pyenv root)/shims" 2>&1 || true)"
           echo -e "::debug::PATH:\n$(echo "$PATH" | tr ":" "\n")"
           echo "$output" | grep -i "pyenv: version .* not installed" && \
             {
               echo "::error:: Expected python --version to work, hit pyenv instead."
-              # echo "::debug::$(pyenv versions)"
-              # echo "::debug::$(echo "$PATH" | tr ":" "\n")"
+              echo "::debug::$(pyenv versions)"
+              echo "::debug::$(echo "$PATH" | tr ":" "\n")"
               exit 1
             }
           echo "Success!"
