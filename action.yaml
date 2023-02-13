@@ -9,7 +9,7 @@ outputs:
       The version of golang that has been installed and is ready for use.
   node:
     description:
-      The verison of Node.js that has been installed and is ready for use.
+      The version of Node.js that has been installed and is ready for use.
   java:
     description:
       The version of Java that has been installed and is ready for use.
